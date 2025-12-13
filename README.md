@@ -1,4 +1,12 @@
 <div align="center">
+
+## Web Apps had React → AI Apps will have Zaltech ❤️‍🔥
+
+</div>
+
+<br/>
+
+<div align="center">
   <img src="assets/zaltech-logo.png" alt="Zaltech AI-Native Apps Framework" width="100%">
 </div>
 
@@ -6,13 +14,21 @@
 
 A full-stack framework for building **AI-native, cross-provider applications** that run across **ChatGPT, OpenAI, Gemini, Claude, and any MCP-compatible platforms**. Designed to standardize how you build tools, UI widgets, and integrations on top of the **[Model Context Protocol (MCP)](https://modelcontextprotocol.io/)**.
 
-**🚀 Coming Soon (2026):** Zaltech framework will be publicly available in 2026.
 
-<div align="center">
 
-## Web Apps had React → AI Apps have Zaltech. ❤️‍🔥
+## Project Status
 
-</div>
+Zaltech is in active development.
+
+This repository documents the architecture and early design of an AI-native framework
+extracted from real products built on top of the Model Context Protocol (MCP).
+
+The framework is not yet public while core abstractions and cross-host runtime
+guarantees are still being finalized.
+
+> It will be released publicly once the foundation is stable and reusable, which is currently expected in 2026.
+
+
 
 
 
@@ -28,13 +44,20 @@ Today, building real AI applications means dealing with:
 
 Zaltech unifies all of that into **one consistent, standards-aligned developer surface**.
 
----
 
 ## Core Features
 
+
+<div align="center">
+  <img src="assets/diagrams/zaltech-features.png" alt="Zaltech Features" width="100%">
+</div>
+
+<br/>
+
+
 | Feature                      | Description |
 |-----------------------------|-------------|
-| **MCP-First Architecture**  | Native implementation of MCP tools, resources, prompts, and structured output using [FastMCP](https://modelcontextprotocol.github.io/python-sdk/) from the [official Python SDK](https://github.com/modelcontextprotocol/python-sdk). |
+| **MCP-First Architecture**  | Native implementation of MCP tools, resources, prompts, and structured output using the official [MCP SDK](https://modelcontextprotocol.github.io/python-sdk/). |
 | **Cross-Provider Runtime**  | Run the same app across multiple hosts; **OpenAI is fully supported today**, with Gemini, Claude, and others following as MCP support matures. |
 | **Native AI UI System**     | Host-native, responsive UI components and interactive widgets rendered via MCP resources using [React](https://react.dev/), reusable across chat clients, dashboards, and native or hybrid applications. |
 | **Feature-Based Architecture** | Each capability is a vertical slice (tool + logic + UI), giving clean, domain-driven boundaries and easy reuse. |
@@ -49,15 +72,70 @@ Zaltech unifies all of that into **one consistent, standards-aligned developer s
 | **One-Command DX & Deploy** | One command to run locally and one to deploy—no manual infrastructure orchestration. |
 
 
----
 
-## For ChatGPT App Developers
+## Current Capabilities 
 
-If you're building **ChatGPT Native Apps today**, you typically start by wiring together the **[OpenAI Apps SDK](https://github.com/modelcontextprotocol/python-sdk)** and **[OpenAI Apps UI SDK](https://openai.github.io/apps-sdk-ui/)**, then you still have to figure out **project structure, streaming, state, auth, payments, deployment, tooling, and much more**.
+> As of December 2025
 
-Zaltech is an easy **starter framework** built **directly on top of both SDKs and more**, delivered **pre-wired with structure, observability, visual UI sandbox, and much more**, so you can ship immediately instead of assembling infrastructure.
+Zaltech is designed from day one to support multiple AI providers via MCP, but we want to be fully transparent about what works **today**:
 
----
+- **Full production support**: Only **ChatGPT/OpenAI** currently offers a mature MCP-based runtime for rich interactive UI widgets.
+- **MCP tools & backend logic**: Fully functional and tested on OpenAI, ready for any MCP-compatible host.
+- **Rich interactive UI widgets**: Available exclusively on OpenAI/ChatGPT today (using React + OpenAI Apps UI SDK).
+- **Payments (Agentic Checkout / Delegated Payment)**: OpenAI-only for now.
+- **All other features** (auth, streaming, observability, state management, local testing): Production-ready on OpenAI.
+
+Support for Gemini, Claude, Grok, and others will activate as soon as they ship equivalent UI runtimes. We’re not waiting — the abstractions are built — but rich UI depends on the hosts catching up.
+
+
+## Architecture
+
+Zaltech is **feature-first across the entire stack**, with each feature implemented as a complete vertical slice spanning three layers.
+
+<div align="center">
+  <img src="assets/diagrams/zaltech-layers.png" alt="Zaltech Layers Architecture" width="100%">
+</div>
+
+### Three-Layer Feature Architecture
+
+Each feature is organized as a self-contained vertical slice:
+
+```
+feature_name/
+├── mcp/src/features/{feature}/      # MCP Layer
+│   ├── tool.py                      # MCP tool definition & handler
+│   ├── resource.py                  # Widget resource definitions
+│   └── models.py                    # Pydantic data models
+│
+├── app/src/features/{feature}/      # App Layer
+│   ├── generator.py                 # Core business logic
+│   └── extractor.py                 # Trigger/keyword extraction
+│
+└── ui/src/features/{feature}/       # UI Layer
+    └── React component              # Embedded widget for AI hosts
+```
+
+### Layer Responsibilities
+
+**MCP Layer** (`mcp/src/features/`)
+- Defines MCP tools, schemas, and UI resources
+- Handles tool registration and routing
+- Manages authentication and authorization per tool
+- Exposes widget resources via MCP resource endpoints
+
+**App Layer** (`app/src/features/`)
+- Implements business logic and domain rules
+- Handles provider routing and AI API calls
+- Processes data extraction and transformation
+- Manages state and orchestration
+
+**UI Layer** (`ui/src/features/`)
+- React components rendered as embedded widgets
+- Interactive UI for AI host platforms
+- State management via widget state APIs
+- Responsive layouts using Apps SDK UI primitives
+
+
 
 ## Tech Stack
 
@@ -92,82 +170,72 @@ Zaltech is an opinionated full-stack framework with a **Python backend** and **T
 #### Protocol Layer
 - **[MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)** – Official Model Context Protocol implementation  
 
----
+<div align="center">
+  <img src="assets/diagrams/zaltech-stack.png" alt="Zaltech Tech Stack" width="100%">
+</div>
 
-## Architecture
 
-Zaltech is **feature-first across the entire stack**, with each feature implemented as a complete vertical slice spanning three layers.
 
-### Three-Layer Feature Architecture
 
-Each feature is organized as a self-contained vertical slice:
+## For ChatGPT App Developers
 
-```
-feature_name/
-├── mcp/src/features/{feature}/     # MCP Layer
-│   ├── tool.py                     # MCP tool definition & handler
-│   ├── resource.py                 # Widget resource definitions
-│   └── models.py                   # Pydantic data models
-│
-├── app/src/features/{feature}/      # App Layer
-│   ├── generator.py                 # Core business logic
-│   └── extractor.py                 # Trigger/keyword extraction
-│
-└── ui/src/features/{feature}/       # UI Layer
-    └── React component              # Embedded widget for AI hosts
-```
+If you're building **ChatGPT Native Apps today**, you typically start by wiring together the **[OpenAI Apps SDK](https://github.com/modelcontextprotocol/python-sdk)** and **[OpenAI Apps UI SDK](https://openai.github.io/apps-sdk-ui/)**, then you still have to figure out **project structure, streaming, state, auth, payments, deployment, tooling, and much more**.
 
-### Layer Responsibilities
+Zaltech is an easy **starter framework** built **directly on top of both SDKs and more**, delivered **pre-wired with structure, observability, visual UI sandbox, and much more**, so you can ship immediately instead of assembling infrastructure.
 
-**MCP Layer** (`mcp/src/features/`)
-- Defines MCP tools, schemas, and UI resources
-- Handles tool registration and routing
-- Manages authentication and authorization per tool
-- Exposes widget resources via MCP resource endpoints
 
-**App Layer** (`app/src/features/`)
-- Implements business logic and domain rules
-- Handles provider routing and AI API calls
-- Processes data extraction and transformation
-- Manages state and orchestration
 
-**UI Layer** (`ui/src/features/`)
-- React components rendered as embedded widgets
-- Interactive UI for AI host platforms
-- State management via widget state APIs
-- Responsive layouts using Apps SDK UI primitives
-
----
 
 ## AI Providers Support
 
-| Rank | AI Provider                     | MCP Ready | Zaltech UI Runtime   | Status                   | Notes                                                                   |
-|------|--------------------------------|-----------|----------------------|--------------------------|-------------------------------------------------------------------------|
-| 1    | **ChatGPT (OpenAI)**          | ✅ Ready   | ✅ Ready              | Ready                    | UI runtime ready; public release after OpenAI marketplace opens. |
-| 2    | **Google Gemini**             | ✅ Ready   | ⏳ Pending            | Planned                  | Enabled as soon as Gemini exposes an MCP-based app/UI runtime. |
-| 3    | **Anthropic Claude**           | ✅ Ready   | ⏳ Pending            | Planned                  | Enabled as soon as Claude exposes an MCP-based app/UI runtime. |
-| 4    | **LLaMA (Meta)**               | ✅ Ready   | ⏳ Pending            | Planned                  | MCP-compatible; UI runtime support needed from the host. |
-| 5    | **Mistral AI**                 | ✅ Ready   | ⏳ Pending            | Planned                  | MCP-compatible; runtime support required. |
-| 6    | **Grok (X)**                   | ✅ Ready   | ⏳ Pending            | Planned                  | Enabled as soon as Grok exposes an MCP-based app/runtime surface. |
-| 7    | **Other MCP Hosts**           | ✅ Ready   | 🟡 Host-dependent     | Ongoing                  | Automatically supported for any MCP host that exposes a UI/runtime. |
+| Rank | AI Provider              | MCP Tool Support      | Interactive UI Support | Zaltech Current Support          | Expected Future                              |
+|------|--------------------------|-----------------------|-----------------------------|---------------------------------|----------------------------------------------|
+| 1    | **ChatGPT (OpenAI)**    | ✅ Ready              | ✅ Ready                     | Full (tools + UI)   | Already shipping production apps             |
+| 2    | **Google Gemini**       | ✅ Ready              | ⏳ Pending                   | Tools only                      | UI runtime anticipated in 2026 updates        |
+| 3    | **Anthropic Claude**    | ✅ Ready              | ⏳ Pending                   | Tools only                      | UI enhancements likely as MCP evolves         |
+| 4    | **Mistral AI**          | ✅ Ready              | ⏳ Pending                   | Tools only                      | Rich UI pending provider adoption            |
+| 5    | **Grok (xAI)**           | ✅ Ready              | ⏳ Pending                   | Tools only                      | UI surface expected with platform growth     |
+| 6    | **Perplexity AI**       | ✅ Ready              | ⏳ Pending                   | Tools only                      | Future agentic UI support probable           |
+| 7    | **Meta LLaMA**           | 🟡 Partial            | ⏳ Pending                   | Community/Indirect tools        | Depends on third-party hosts/runners          |
+| 8    | **Other Hosts**         | 🟡 Varies             | 🟡 Host-dependent            | Tools where MCP is implemented  | UI support varies by host implementation     |
 
 
----
 
-## Community
+## How It Came to Be
 
-**💬 Join the Community:** [Join our Discord](https://www.sista.ai/support.html?to=discord) to get early access, and stay updated.
+Zaltech started as internal infrastructure for building multiple AI-native products
+using the OpenAI Apps SDK and MCP from the earliest preview releases, with the
+expectation from day zero that the foundation would need to support more than
+one product.
 
----
+Because there was no established app framework, the first product was built in an
+intentionally extractable way, anticipating the same problems would need to be
+solved again: tool structure, streaming, state management, UI rendering, auth,
+deployment, and observability.
+
+As additional products were built on top of the same core, those shared patterns
+were validated, refined, and progressively hardened into a single reusable
+foundation. That foundation became Zaltech.
+
 
 ## Vision
 
 > Make building AI-native applications as standard as building web apps.
 
-Built by [Mahmoud Zalt](https://zalt.me/) at [Sista AI](https://www.sista.ai/about.html).
+## Community
+
+[Join us on Discord](https://discord.com/invite/e2arxq9Js4) to stay updated.
+
+## License
+
+Distributed under the MIT License. See [`LICENSE`](./LICENSE) for more information.
+
+## Credits
+
+Created by **[Mahmoud Zalt](https://zalt.me/)**, supported by **[Sista AI](https://sista.ai)**.
 
 <div align="center">
-  <a href="https://www.sista.ai/">
-    <img src="https://smart.sista.ai/images/logo/sista-ai-icon.png" alt="Sista AI Logo" width="200">
+  <a href="https://sista.ai/">
+    <img src="https://www.sista.ai/images/logo/sista-ai-icon.png" alt="Sista AI Logo" width="160">
   </a>
 </div>
